@@ -65,7 +65,7 @@
   <main class="wrap">
     <header class="hero">
       <h1>AI használat</h1>
-      <p class="lead">Korosztály, gyakoriság, helyszín, célok, térkép.</p>
+      <p class="lead">Korosztály, gyakoriság, helyszín, célok, top országok.</p>
 
       <div class="controls">
         <label for="ageGlobal">Korosztály:</label>
@@ -136,8 +136,8 @@
     </section>
 
     <section class="card">
-      <h2>4) Térkép</h2>
-      <p class="desc">A térkép országonként mutatja az AI-használók arányát.</p>
+      <h2>4) Top 10 ország</h2>
+      <p class="desc">Az ábra a legmagasabb AI-használati arányú országokat rangsorolja.</p>
       <div id="vis4" class="chart"></div>
     </section>
 
@@ -168,7 +168,6 @@ const PLACE = ["Otthon","Iskola/Egyetem","Munkahely","Mobil útközben","Közter
 const PURPOSE = ["Csevegés/infó","Tanulás","Kódolás","Képgenerálás","Keresés/összegzés","Ötletelés/írás"];
 const FREQ = ["Napi","Heti többször","Heti 1x","Ritkán"];
 
-/* országnevek: egyezzenek a data/countries.json "name" mezőivel */
 const COUNTRIES = [
   "Hungary","Romania","Germany","France","United Kingdom","Italy","Spain","Netherlands",
   "Poland","Czech Republic","Austria","Sweden","Norway","Denmark","Portugal","Greece",
@@ -354,55 +353,34 @@ function barCountByAgeSpec(rowsYes, freq, title){
   };
 }
 
-/* ====== 4) TÉRKÉP – helyi fájlokból ====== */
-function mapSpec(countryValues){
+function topCountriesSpec(values){
   return {
     ...baseConfig(),
     "width":"container",
-    "height":380,
-    "projection":{"type":"equalEarth"},
-    "data":{
-      "url":"world-110m.json",
-      "format":{"type":"topojson","feature":"countries"}
-    },
-    "transform":[
-      {
-        "lookup":"id",
-        "from":{
-          "data":{"url":"ountries.json"},
-          "key":"id",
-          "fields":["name"]
-        }
-      },
-      {
-        "lookup":"name",
-        "from":{
-          "data":{"values": countryValues},
-          "key":"country",
-          "fields":["value","total","yes"]
-        }
-      },
-      {"filter":"isValid(datum.name)"}  // csak azonosított országok
-    ],
-    "mark":{"type":"geoshape","stroke":"#ffffff"},
+    "height":320,
+    "data":{"values": values},
+    "mark":{"type":"bar","cornerRadiusTopLeft":6,"cornerRadiusTopRight":6},
     "encoding":{
-      "color":{
-        "condition":{
-          "test":"isValid(datum.value)",
-          "field":"value",
-          "type":"quantitative",
-          "title":"AI-használók aránya (%)",
-          "scale":{"zero":false}
-        },
-        "value":"#e9f2ff"
+      "x":{
+        "field":"country",
+        "type":"nominal",
+        "title":"Ország",
+        "sort":"-y",
+        "axis":{"labelAngle":-25}
+      },
+      "y":{
+        "field":"value",
+        "type":"quantitative",
+        "title":"AI-használók aránya (%)"
       },
       "tooltip":[
-        {"field":"name","type":"nominal","title":"Ország"},
+        {"field":"country","type":"nominal","title":"Ország"},
         {"field":"value","type":"quantitative","title":"AI-használók aránya (%)","format":".1f"},
         {"field":"yes","type":"quantitative","title":"AI-használók (db)"},
         {"field":"total","type":"quantitative","title":"Összes (db)"}
       ]
-    }
+    },
+    "title":{"text":"Top 10 ország – AI-használók aránya (%)","color":"#1e88e5","fontSize":14,"fontWeight":800}
   };
 }
 
@@ -465,9 +443,12 @@ async function renderAll(){
     .sort((a,b)=>PLACE.indexOf(a.category)-PLACE.indexOf(b.category));
   await vegaEmbed("#vis3", barPctSpec(v3, "Hol használják a legtöbbet? (%)", "Helyszín", "Arány (%)"), {actions:false});
 
-  // 4
-  const mapValues = countryUsePct(all);
-  await vegaEmbed("#vis4", mapSpec(mapValues), {actions:false});
+  // 4) Top 10 ország
+  const top10 = countryUsePct(all)
+    .filter(d => Number.isFinite(d.value))
+    .sort((a,b) => b.value - a.value)
+    .slice(0,10);
+  await vegaEmbed("#vis4", topCountriesSpec(top10), {actions:false});
 
   // 5
   const placePick = document.getElementById("place5").value;
