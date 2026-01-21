@@ -362,14 +362,14 @@ function mapSpec(countryValues){
     "height":380,
     "projection":{"type":"equalEarth"},
     "data":{
-      "url":"data/world-110m.json",
+      "url":"world-110m.json",
       "format":{"type":"topojson","feature":"countries"}
     },
     "transform":[
       {
         "lookup":"id",
         "from":{
-          "data":{"url":"data/countries.json"},
+          "data":{"url":"ountries.json"},
           "key":"id",
           "fields":["name"]
         }
