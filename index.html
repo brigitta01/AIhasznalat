@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>AI használata – Interaktív projekt (5 viz)</title>
+  <title>AI használata</title>
 
   <style>
     *{margin:0;padding:0;box-sizing:border-box;font-family:Poppins,system-ui,Arial;}
@@ -20,6 +20,7 @@
     }
     .hero h1{color:#1e88e5;font-size:2rem;margin-bottom:8px;}
     .lead{color:#556;line-height:1.4;margin-bottom:12px;}
+
     .kpis{
       display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:12px;
     }
@@ -40,27 +41,18 @@
       padding:18px;
     }
     .wide{ grid-column:1/-1; }
-    .card h2{color:#2b3350;font-size:1.05rem;margin-bottom:6px;}
-    .note{color:#667;font-size:.92rem;line-height:1.35;margin-bottom:10px;}
+    .card h2{color:#2b3350;font-size:1.05rem;margin-bottom:10px;}
     .chart{width:100%;}
 
     .controls{
       display:flex; gap:10px; flex-wrap:wrap; align-items:center;
-      margin-top: 10px;
+      margin: 0 0 10px 0;
     }
     .controls label{font-weight:800;color:#2b3350;font-size:.92rem;}
-    select,input[type="range"]{
+    select{
       border:1px solid #d7e6ff;background:#f7fbff;color:#2b3350;
       padding:10px 12px;border-radius:12px;font-weight:700;cursor:pointer;
     }
-    input[type="range"]{ padding:0; height: 34px; }
-    .chip{
-      display:inline-flex; align-items:center; gap:8px;
-      background:#f7fbff; border:1px solid #d7e6ff; border-radius:999px;
-      padding:8px 12px; font-weight:800; color:#2b3350; font-size:.9rem;
-    }
-    .chip input{ width:16px; height:16px; cursor:pointer; }
-    .mini{ color:#556; font-size:.88rem; margin-top: 6px; }
 
     @media (max-width: 980px){
       .grid{grid-template-columns:1fr;}
@@ -79,12 +71,11 @@
     <header class="hero">
       <h1>AI használata – interaktív adatvizualizáció (5 viz)</h1>
       <p class="lead">
-        Téma: <b>AI használat</b>. A vizualizációk célja döntéshozói nézőpontból megmutatni:
-        <b>kik</b> használják, <b>milyen gyakran</b>, <b>hol</b>, <b>mire</b>, és <b>országonként</b> hol a legerősebb az adoptálás.
+        AI használat – korosztály, gyakoriság, helyszín, célok, országok.
       </p>
 
       <div class="controls">
-        <label for="ageGlobal">Globális szűrő (korosztály):</label>
+        <label for="ageGlobal">Korosztály:</label>
         <select id="ageGlobal">
           <option value="ALL">Összes</option>
           <option value="13–17">13–17</option>
@@ -95,17 +86,12 @@
           <option value="45–54">45–54</option>
           <option value="55+">55+</option>
         </select>
-
-        <span class="chip" title="Csak AI-használók (Igen)">
-          <input id="onlyUsers" type="checkbox" />
-          Csak AI-használók
-        </span>
       </div>
 
       <div class="kpis">
         <div class="kpi">
           <div class="num" id="kpiN">—</div>
-          <div class="lab">Mintanagyság (szűrés után)</div>
+          <div class="lab">Mintanagyság</div>
         </div>
         <div class="kpi">
           <div class="num" id="kpiUsePct">—</div>
@@ -113,81 +99,64 @@
         </div>
         <div class="kpi">
           <div class="num" id="kpiTopPurpose">—</div>
-          <div class="lab">Top felhasználási cél (AI-használók)</div>
+          <div class="lab">Top felhasználási cél</div>
         </div>
       </div>
-      <div class="mini">Tipp: hovereld az elemeket (tooltip), használd a szűrőket és a rendezést.</div>
     </header>
 
     <section class="grid">
-      <!-- VIZ 1 -->
+      <!-- 1 -->
       <div class="card">
-        <h2>1) AI-használat korosztály szerint – “mutató választó” + rendezés</h2>
-        <p class="note">
-          Válassz mutatót: <b>AI-használók aránya</b>, <b>Napi használók aránya</b>, vagy <b>Tanulás cél aránya</b>.
-          Üzleti érték: célzás (targeting) és növekedési fókusz.
-        </p>
-        <div class="controls">
-          <label for="metric1">Mutató:</label>
-          <select id="metric1">
-            <option value="use_pct">AI-használók aránya (%)</option>
-            <option value="daily_pct">Napi használók aránya (%)</option>
-            <option value="learn_pct">Tanulás cél aránya (%)</option>
-          </select>
-
-          <span class="chip" title="Csökkenő rendezés a választott mutató szerint">
-            <input id="sort1" type="checkbox"/>
-            Csökkenő rendezés
-          </span>
-        </div>
+        <h2>1) AI használata korosztály szerint</h2>
         <div id="vis1" class="chart"></div>
       </div>
 
-      <!-- VIZ 2 -->
+      <!-- 2 -->
       <div class="card">
-        <h2>2) Használati gyakoriság korosztály szerint (stacked)</h2>
-        <p class="note">
-          Megmutatja, hogy az AI-használók milyen arányban “Napi / Heti / Ritkán” használók.
-          Üzleti érték: engagement + retention.
-        </p>
+        <h2>2) Használati gyakoriság korosztály szerint</h2>
+        <div class="controls">
+          <label for="freq2">Gyakoriság:</label>
+          <select id="freq2">
+            <option value="ALL">Összes</option>
+            <option value="Napi">Napi</option>
+            <option value="Heti többször">Heti többször</option>
+            <option value="Heti 1x">Heti 1x</option>
+            <option value="Ritkán">Ritkán</option>
+          </select>
+        </div>
         <div id="vis2" class="chart"></div>
       </div>
 
-      <!-- VIZ 3 -->
+      <!-- 3 -->
       <div class="card">
-        <h2>3) Hol használják a legtöbbet? – korosztály szűrés + százalék</h2>
-        <p class="note">
-          Kontekstus: otthon / iskola / munkahely / mobil. Üzleti érték: csatorna és UX optimalizálás.
-        </p>
+        <h2>3) Hol használják a legtöbbet?</h2>
+        <div class="controls">
+          <label for="freq3">Gyakoriság:</label>
+          <select id="freq3">
+            <option value="ALL">Összes</option>
+            <option value="Napi">Napi</option>
+            <option value="Heti többször">Heti többször</option>
+            <option value="Heti 1x">Heti 1x</option>
+            <option value="Ritkán">Ritkán</option>
+          </select>
+        </div>
         <div id="vis3" class="chart"></div>
       </div>
 
-      <!-- VIZ 4 MAP -->
+      <!-- 4 -->
       <div class="card">
         <h2>4) Térkép – AI-használók aránya országonként</h2>
-        <p class="note">
-          Choropleth map: országok színezve az AI-használat arányával. Üzleti érték: piacprioritás.
-        </p>
         <div id="vis4" class="chart"></div>
       </div>
 
-      <!-- VIZ 5 (purpose w/ filters) -->
+      <!-- 5 -->
       <div class="card wide">
-        <h2>5) Mire használják? – helyszín szűrés + minimum küszöb + heatmap</h2>
-        <p class="note">
-          A bal oldali diagram célmegoszlás (szűrhető helyszínre és min. küszöbre), a jobb oldali heatmap
-          gyorsan megmutatja a <b>Cél × Hely</b> mintázatot.
-        </p>
-
+        <h2>5) Mire használják?</h2>
         <div class="controls">
-          <label for="place5">Helyszín (cél-diagram):</label>
+          <label for="place5">Helyszín:</label>
           <select id="place5">
             <option value="ALL">Összes</option>
           </select>
-
-          <label for="min5">Min. %:</label>
-          <input id="min5" type="range" min="0" max="40" value="0" />
-          <span class="chip" id="min5Label">0%</span>
         </div>
 
         <div class="grid" style="margin-top:12px;">
@@ -214,9 +183,11 @@ const AGE = ["13–17","18–20","21–24","25–34","35–44","45–54","55+"];
 const PLACE = ["Otthon","Iskola/Egyetem","Munkahely","Mobil útközben","Közterület"];
 const PURPOSE = ["Csevegés/infó","Tanulás","Kódolás","Képgenerálás","Keresés/összegzés","Ötletelés/írás"];
 const FREQ = ["Napi","Heti többször","Heti 1x","Ritkán"];
+
+/* FONTOS: országnevek igazítva a vega-datasets országneveihez */
 const COUNTRIES = [
   "Hungary","Romania","Germany","France","United Kingdom","Italy","Spain","Netherlands",
-  "Poland","Czechia","Austria","Sweden","Norway","Denmark","Portugal","Greece",
+  "Poland","Czech Republic","Austria","Sweden","Norway","Denmark","Portugal","Greece",
   "Ireland","Belgium","Switzerland","Finland","Bulgaria","Croatia","Serbia","Slovakia"
 ];
 
@@ -233,7 +204,6 @@ function pickWeighted(items, weights){
 function genRow(id){
   const age = pickWeighted(AGE, [7,10,16,28,18,12,9]);
 
-  // AI használat valószínűség életkor szerint (demo, de realisztikus)
   const pUse = (age==="13–17")?0.60 :
                (age==="18–20")?0.75 :
                (age==="21–24")?0.84 :
@@ -243,7 +213,6 @@ function genRow(id){
 
   const uses_ai = (Math.random() < pUse) ? "Igen" : "Nem";
 
-  // ország: enyhén nyugat-európa felé húzó súlyozás (demo)
   const country = pickWeighted(COUNTRIES, [
     4,4,5,5,5,5,4,4,
     4,4,3,3,2,2,3,3,
@@ -264,113 +233,80 @@ function genRow(id){
 const DATA = Array.from({length:1200}, (_,i)=>genRow(i+1));
 
 /* =========================
-   2) Szűrés + KPI-k
+   2) Helper aggregációk
 ========================= */
-function getFiltered(){
-  const age = document.getElementById("ageGlobal").value;
-  const onlyUsers = document.getElementById("onlyUsers").checked;
-
-  let rows = (age === "ALL") ? DATA : DATA.filter(d => d.age_group === age);
-  if (onlyUsers) rows = rows.filter(d => d.uses_ai === "Igen");
-  return rows;
+function getAgeFilter(){
+  return document.getElementById("ageGlobal").value;
 }
 
-function updateKPIs(rows){
-  const n = rows.length;
-  const all = (document.getElementById("ageGlobal").value==="ALL" && !document.getElementById("onlyUsers").checked) ? DATA : rows;
+function rowsAllWithAge(){
+  const age = getAgeFilter();
+  return (age==="ALL") ? DATA : DATA.filter(d=>d.age_group===age);
+}
 
-  // AI használók aránya (mindig az "összes" szűrt halmazon belül értelmezzük)
-  const total = all.length;
-  const yes = all.filter(d=>d.uses_ai==="Igen").length;
-  const usePct = total ? (yes/total*100) : 0;
+function rowsYesWithAge(){
+  return rowsAllWithAge().filter(d=>d.uses_ai==="Igen");
+}
 
-  // top purpose az AI-használók között (a szűrt halmazon)
-  const yesRows = rows.filter(d=>d.uses_ai==="Igen");
+function updateKPIs(){
+  const all = rowsAllWithAge();
+  const yes = all.filter(d=>d.uses_ai==="Igen");
+  const usePct = all.length ? (yes.length/all.length*100) : 0;
+
   const m = new Map();
-  for (const r of yesRows){
-    if (r.purpose==="N/A") continue;
+  for (const r of yes){
     m.set(r.purpose, (m.get(r.purpose)||0)+1);
   }
   let best = ["—",0];
   for (const [k,v] of m.entries()){
+    if (k==="N/A") continue;
     if (v>best[1]) best=[k,v];
   }
 
-  document.getElementById("kpiN").textContent = n.toLocaleString("hu-HU");
+  document.getElementById("kpiN").textContent = all.length.toLocaleString("hu-HU");
   document.getElementById("kpiUsePct").textContent = `${usePct.toFixed(1)}%`;
-  document.getElementById("kpiTopPurpose").textContent = (best[0]==="—") ? "—" : `${best[0]} (${best[1]})`;
+  document.getElementById("kpiTopPurpose").textContent = best[0]==="—" ? "—" : `${best[0]} (${best[1]})`;
 }
 
-/* =========================
-   3) Aggregálók (tidy -> viz)
-========================= */
-function groupCount(rows, key){
-  const map = new Map();
-  for (const r of rows){
-    const k = r[key];
-    map.set(k, (map.get(k)||0)+1);
-  }
-  return map;
-}
-
-function groupCount2(rows, key1, key2){
-  const map = new Map();
-  for (const r of rows){
-    const k = `${r[key1]}|||${r[key2]}`;
-    map.set(k, (map.get(k)||0)+1);
-  }
-  return map;
-}
-
-function buildAgeMetrics(rowsAll){ // rowsAll: AI+nemAI (szűrt kor szerint, de nem "onlyUsers" forced)
-  // per age_group: total, yes, daily_yes, learning_yes
-  const out = [];
-  for (const age of AGE){
-    const r = rowsAll.filter(d=>d.age_group===age);
-    const total = r.length;
-    const yesRows = r.filter(d=>d.uses_ai==="Igen");
-    const yes = yesRows.length;
-    const daily = yesRows.filter(d=>d.frequency==="Napi").length;
-    const learn = yesRows.filter(d=>d.purpose==="Tanulás").length;
-
-    out.push({
-      age_group: age,
-      total,
-      yes,
-      use_pct: total? (yes/total*100):0,
-      daily_pct: total? (daily/total*100):0,
-      learn_pct: total? (learn/total*100):0
-    });
-  }
-  return out;
-}
-
-function percentByCategory(rowsYes, key){ // rowsYes: uses_ai==="Igen"
+function percentByCategory(rowsYes, key){
   const total = rowsYes.length || 1;
-  const counts = groupCount(rowsYes, key);
+  const counts = new Map();
+  for (const r of rowsYes){
+    const k = r[key];
+    counts.set(k, (counts.get(k)||0)+1);
+  }
   const out = [];
   for (const [k,v] of counts.entries()){
     if (k==="N/A") continue;
-    out.push({category:k, count:v, pct:(v/total*100)});
+    out.push({category:k, pct:(v/total*100), count:v});
   }
   return out;
 }
 
-function countryUsePct(rowsAll){ // rowsAll: include Igen/Nem (kor szűrt), compute yes/total per country
+function buildAgeUsePct(rowsAll){
+  const out = [];
+  for (const a of AGE){
+    const r = rowsAll.filter(d=>d.age_group===a);
+    const total = r.length;
+    const yes = r.filter(d=>d.uses_ai==="Igen").length;
+    out.push({category:a, value: total ? (yes/total*100) : 0, count: total});
+  }
+  return out;
+}
+
+function countryUsePct(rowsAll){
   const out = [];
   for (const c of COUNTRIES){
     const r = rowsAll.filter(d=>d.country===c);
     const total = r.length;
     const yes = r.filter(d=>d.uses_ai==="Igen").length;
-    if (total>0){
-      out.push({country:c, total, yes, value: yes/total*100});
-    }
+    if (total>0) out.push({country:c, total, yes, value: yes/total*100});
   }
   return out;
 }
 
 /* =========================
-   4) Vega-Lite spec gyártók
+   3) Vega-Lite spec-ek
 ========================= */
 function baseConfig(){
   return {
@@ -384,51 +320,69 @@ function baseConfig(){
 function barPctSpec(values, title, xTitle, yTitle){
   return {
     ...baseConfig(),
-    "width": "container",
-    "height": 260,
-    "data": {"values": values},
-    "mark": {"type":"bar","cornerRadiusTopLeft":6,"cornerRadiusTopRight":6},
-    "encoding": {
-      "x": {"field":"category","type":"nominal","title": xTitle},
-      "y": {"field":"value","type":"quantitative","title": yTitle},
-      "tooltip": [
-        {"field":"category","type":"nominal", "title": xTitle},
+    "width":"container",
+    "height":260,
+    "data":{"values": values},
+    "mark":{"type":"bar","cornerRadiusTopLeft":6,"cornerRadiusTopRight":6},
+    "encoding":{
+      "x":{"field":"category","type":"nominal","title": xTitle},
+      "y":{"field":"value","type":"quantitative","title": yTitle},
+      "tooltip":[
+        {"field":"category","type":"nominal","title": xTitle},
         {"field":"value","type":"quantitative","title": yTitle, "format": ".1f"},
         {"field":"count","type":"quantitative","title":"Db"}
       ]
     },
-    "title": {"text": title, "color":"#1e88e5", "fontSize": 14, "fontWeight": 800}
+    "title":{"text": title, "color":"#1e88e5", "fontSize":14, "fontWeight":800}
   };
 }
 
-function stackedSpec(rows, xField, colorField, title){
+function stackedSpec(rowsYes, title){
   return {
     ...baseConfig(),
     "width":"container",
     "height":260,
-    "data":{"values": rows},
+    "data":{"values": rowsYes},
     "mark":"bar",
     "encoding":{
-      "x":{"field":xField,"type":"nominal","title":"Korosztály","sort":AGE},
+      "x":{"field":"age_group","type":"nominal","title":"Korosztály","sort":AGE},
       "y":{"aggregate":"count","type":"quantitative","title":"Válaszok (db)"},
-      "color":{"field":colorField,"type":"nominal","title":"Gyakoriság","sort":FREQ},
+      "color":{"field":"frequency","type":"nominal","title":"Gyakoriság","sort":FREQ},
       "tooltip":[
-        {"field":xField,"type":"nominal","title":"Korosztály"},
-        {"field":colorField,"type":"nominal","title":"Gyakoriság"},
+        {"field":"age_group","type":"nominal","title":"Korosztály"},
+        {"field":"frequency","type":"nominal","title":"Gyakoriság"},
         {"aggregate":"count","type":"quantitative","title":"Db"}
       ]
     },
-    "title": {"text": title, "color":"#1e88e5", "fontSize": 14, "fontWeight": 800}
+    "title":{"text": title, "color":"#1e88e5", "fontSize":14, "fontWeight":800}
+  };
+}
+
+function barCountByAgeSpec(rowsYes, freq, title){
+  return {
+    ...baseConfig(),
+    "width":"container",
+    "height":260,
+    "data":{"values": rowsYes.filter(d=>d.frequency===freq)},
+    "mark":{"type":"bar","cornerRadiusTopLeft":6,"cornerRadiusTopRight":6},
+    "encoding":{
+      "x":{"field":"age_group","type":"nominal","title":"Korosztály","sort":AGE},
+      "y":{"aggregate":"count","type":"quantitative","title":"Válaszok (db)"},
+      "tooltip":[
+        {"field":"age_group","type":"nominal","title":"Korosztály"},
+        {"aggregate":"count","type":"quantitative","title":"Db"}
+      ]
+    },
+    "title":{"text": title, "color":"#1e88e5", "fontSize":14, "fontWeight":800}
   };
 }
 
 function mapSpec(countryValues){
-  // Világtérkép + ország név lookup + a mi countryValues listánkhoz join
   return {
     ...baseConfig(),
-    "width": "container",
-    "height": 320,
-    "projection": {"type":"equalEarth"},
+    "width":"container",
+    "height":320,
+    "projection":{"type":"equalEarth"},
     "layer":[
       {
         "data":{
@@ -476,7 +430,7 @@ function mapSpec(countryValues){
         }
       }
     ],
-    "title": {"text":"AI-használók aránya országonként (%)", "color":"#1e88e5", "fontSize": 14, "fontWeight": 800}
+    "title":{"text":"AI-használók aránya országonként (%)", "color":"#1e88e5", "fontSize":14, "fontWeight":800}
   };
 }
 
@@ -497,16 +451,15 @@ function heatmapSpec(rowsYes){
         {"aggregate":"count","type":"quantitative","title":"Db"}
       ]
     },
-    "title": {"text":"Heatmap: Cél × Hely (db)", "color":"#1e88e5", "fontSize": 14, "fontWeight": 800}
+    "title":{"text":"Heatmap: Cél × Hely (db)", "color":"#1e88e5", "fontSize":14, "fontWeight":800}
   };
 }
 
 /* =========================
-   5) Render: 5 viz + UI
+   4) Render
 ========================= */
 function fillPlaceDropdown(){
   const sel = document.getElementById("place5");
-  // egyszer töltsük
   if (sel.options.length > 1) return;
   for (const p of PLACE){
     const opt = document.createElement("option");
@@ -518,112 +471,52 @@ function fillPlaceDropdown(){
 
 async function renderAll(){
   fillPlaceDropdown();
+  updateKPIs();
 
-  const age = document.getElementById("ageGlobal").value;
+  const all = rowsAllWithAge();
+  const yes = all.filter(d=>d.uses_ai==="Igen");
 
-  // rowsAll: kor szűrés, de AI/Nem is benne (mindig kell a % számításhoz)
-  const rowsAll = (age==="ALL") ? DATA : DATA.filter(d=>d.age_group===age);
+  /* 1) */
+  const v1 = buildAgeUsePct(all);
+  await vegaEmbed("#vis1", barPctSpec(v1, "AI-használók aránya korosztály szerint (%)", "Korosztály", "Arány (%)"), {actions:false});
 
-  // rowsShown: a globális "onlyUsers" is hat
-  const rowsShown = getFiltered();
-
-  updateKPIs(rowsShown);
-
-  // AI-használók külön (a megjelenített készletből)
-  const yesShown = rowsShown.filter(d=>d.uses_ai==="Igen");
-
-  /* -------- VIZ 1: mutató + rendezés -------- */
-  const metric = document.getElementById("metric1").value; // use_pct / daily_pct / learn_pct
-  const sortDesc = document.getElementById("sort1").checked;
-
-  const ageMetrics = buildAgeMetrics(rowsAll); // mindig rowsAll alapján legyen arány az adott kor-szűrésen belül
-  let v1 = ageMetrics.map(d => ({
-    category: d.age_group,
-    value: d[metric],
-    count: d.total,
-    yes: d.yes
-  }));
-
-  if (sortDesc){
-    v1 = [...v1].sort((a,b)=>b.value-a.value);
+  /* 2) */
+  const f2 = document.getElementById("freq2").value;
+  if (f2 === "ALL"){
+    await vegaEmbed("#vis2", stackedSpec(yes, "Gyakoriság korosztály szerint (db)"), {actions:false});
   } else {
-    // alap sorrend: AGE
-    v1 = [...v1].sort((a,b)=>AGE.indexOf(a.category)-AGE.indexOf(b.category));
+    await vegaEmbed("#vis2", barCountByAgeSpec(yes, f2, `Gyakoriság (${f2}) korosztály szerint (db)`), {actions:false});
   }
 
-  const v1Title = (metric==="use_pct") ? "AI-használók aránya korosztály szerint (%)"
-               : (metric==="daily_pct") ? "Napi AI-használók aránya korosztály szerint (%)"
-               : "Tanulás cél aránya korosztály szerint (%)";
+  /* 3) */
+  const f3 = document.getElementById("freq3").value;
+  const yes3 = (f3==="ALL") ? yes : yes.filter(d=>d.frequency===f3);
+  const v3 = percentByCategory(yes3, "place")
+    .map(d=>({category:d.category, value:d.pct, count:d.count}))
+    .sort((a,b)=>PLACE.indexOf(a.category)-PLACE.indexOf(b.category));
+  await vegaEmbed("#vis3", barPctSpec(v3, "Hol használják a legtöbbet? (%)", "Helyszín", "Arány (%)"), {actions:false});
 
-  const spec1 = barPctSpec(v1, v1Title, "Korosztály", "Arány (%)");
+  /* 4) */
+  const mapValues = countryUsePct(all);
+  await vegaEmbed("#vis4", mapSpec(mapValues), {actions:false});
 
-  /* -------- VIZ 2: stacked frequency by age (csak AI-használók) -------- */
-  const spec2 = stackedSpec(yesShown, "age_group", "frequency", "Gyakoriság korosztály szerint (db)");
-
-  /* -------- VIZ 3: place % (csak AI-használók) -------- */
-  const v3raw = percentByCategory(yesShown, "place")
-    .filter(d=>d.category!=="N/A")
-    .map(d=>({category:d.category, value:d.pct, count:d.count}));
-
-  // stabil sorrend + picit rendezés érték szerint (szebb)
-  const v3 = [...v3raw].sort((a,b)=>PLACE.indexOf(a.category)-PLACE.indexOf(b.category));
-
-  const spec3 = barPctSpec(v3, "Hol használják a legtöbbet? (%)", "Helyszín", "Arány (%)");
-
-  /* -------- VIZ 4: MAP (országonkénti AI arány) -------- */
-  const mapValues = countryUsePct(rowsAll); // mindig rowsAll, hogy legyen total+yes
-  const spec4 = mapSpec(mapValues);
-
-  /* -------- VIZ 5a: purpose % (helyszín szűrő + min%) -------- */
+  /* 5a) */
   const placePick = document.getElementById("place5").value;
-  const minPct = Number(document.getElementById("min5").value);
-  document.getElementById("min5Label").textContent = `${minPct}%`;
+  const yes5 = (placePick==="ALL") ? yes : yes.filter(d=>d.place===placePick);
+  const v5a = percentByCategory(yes5, "purpose")
+    .map(d=>({category:d.category, value:d.pct, count:d.count}))
+    .sort((a,b)=>b.value-a.value);
+  await vegaEmbed("#vis5a", barPctSpec(v5a, "Mire használják? (%)", "Felhasználási cél", "Arány (%)"), {actions:false});
 
-  let yesForPurpose = yesShown;
-  if (placePick !== "ALL"){
-    yesForPurpose = yesForPurpose.filter(d=>d.place === placePick);
-  }
-  let v5a = percentByCategory(yesForPurpose, "purpose")
-    .filter(d=>d.category!=="N/A")
-    .map(d=>({category:d.category, value:d.pct, count:d.count}));
-
-  // min küszöb
-  v5a = v5a.filter(d=>d.value >= minPct);
-
-  // rendezés csökkenő (hasznos menedzsmentnek)
-  v5a = v5a.sort((a,b)=>b.value-a.value);
-
-  const title5a = (placePick==="ALL")
-    ? "Mire használják? (%) – összes helyszín"
-    : `Mire használják? (%) – szűrő: ${placePick}`;
-
-  const spec5a = barPctSpec(v5a, title5a, "Felhasználási cél", "Arány (%)");
-
-  /* -------- VIZ 5b: heatmap (AI-használók) -------- */
-  const spec5b = heatmapSpec(yesShown);
-
-  // Render (actions off)
-  await vegaEmbed("#vis1", spec1, {actions:false});
-  await vegaEmbed("#vis2", spec2, {actions:false});
-  await vegaEmbed("#vis3", spec3, {actions:false});
-  await vegaEmbed("#vis4", spec4, {actions:false});
-  await vegaEmbed("#vis5a", spec5a, {actions:false});
-  await vegaEmbed("#vis5b", spec5b, {actions:false});
+  /* 5b) */
+  await vegaEmbed("#vis5b", heatmapSpec(yes), {actions:false});
 }
 
-/* =========================
-   6) Eventek + init
-========================= */
 document.getElementById("ageGlobal").addEventListener("change", renderAll);
-document.getElementById("onlyUsers").addEventListener("change", renderAll);
-
-document.getElementById("metric1").addEventListener("change", renderAll);
-document.getElementById("sort1").addEventListener("change", renderAll);
-
+document.getElementById("freq2").addEventListener("change", renderAll);
+document.getElementById("freq3").addEventListener("change", renderAll);
 document.getElementById("place5").addEventListener("change", renderAll);
-document.getElementById("min5").addEventListener("input", renderAll);
 
-// reszponzív újrarender (debounce)
 let t;
 window.addEventListener("resize", () => {
   clearTimeout(t);
